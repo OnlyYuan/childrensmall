@@ -1,0 +1,13 @@
+<layer-list xmlns:android="http://schemas.android.com/apk/res/android">
+
+    <item android:id="@android:id/background"
+        android:drawable="@mipmap/progress_bg"/>
+
+    <item android:id="@android:id/progress"
+          android:height="15dp"
+          android:top="4dp"
+          android:start="7dp"
+          android:end="7dp"
+          android:drawable="@mipmap/progress"
+        />
+</layer-list>

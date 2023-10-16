@@ -1,0 +1,4 @@
+<resources>
+    <string name="app_name">小屏</string>
+    <string name="star_num_string">x %1$s </string>
+</resources>
