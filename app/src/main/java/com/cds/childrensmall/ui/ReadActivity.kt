@@ -221,7 +221,7 @@ class ReadActivity : BaseActivity(), View.OnClickListener {
                     Log.i("11","--->成功${it}")
                     totalReadScore += it?:0
                     EventBus.getDefault().post("${readScore}?${it?:0}")
-                    val waitCounterTime = WaitCounterTime(2400L,400L)
+                    val waitCounterTime = WaitCounterTime(4000L,1000L)
                     waitCounterTime.start()
                 }
             )

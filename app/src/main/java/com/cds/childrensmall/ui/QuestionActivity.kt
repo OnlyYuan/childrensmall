@@ -129,9 +129,9 @@ class QuestionActivity : BaseActivity(), View.OnClickListener {
                         questionNodeList.clear()
                         it1.children?.let { it2 ->
                             questionNodeList.addAll(it2)
-                            answerAdapter.setList(questionNodeList)
-                        }
 
+                        }
+                        answerAdapter.setList(questionNodeList)
                     }
                     if (it != null) {
                         when(it.current?.userRespWay){
@@ -144,7 +144,8 @@ class QuestionActivity : BaseActivity(), View.OnClickListener {
                             "end"->{//结束
                                 answerAdapter.setList(questionNodeList)
                                 mBinding.tip.visibility = View.VISIBLE
-                                val myCountIme = WaitCounterTime("",2000L,1000L)
+                                totalAnswerScore+=3
+                                val myCountIme = WaitCounterTime("",5000L,1000L)
                                 myCountIme.start()
                                // Toast.makeText(this@QuestionActivity,"答题结束",Toast.LENGTH_SHORT).show()
                             }
