@@ -50,6 +50,8 @@ class MySocket(private val ip:String,private val port:Int):Thread(){
                  bufferedWriter!!.flush()
                  Log.i("11","-->发送成功${msg}")
              }catch (e:Exception){
+                 isSuccess = false
+                 EventBus.getDefault().post("socketfail")
                  Log.i("11","-->发送失败")
              }
          }

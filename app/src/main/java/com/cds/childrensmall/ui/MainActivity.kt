@@ -46,6 +46,7 @@ class MainActivity : BaseActivity(), View.OnClickListener {
     private val contentDataList = ArrayList<ConfigDataBean.ContentData>()//关卡list
     private var totalCount  = 0 //总关卡
     private var curPosition = -1//关卡位置
+    private var isConnection = false  //是否连接
     private val summaryLauncher = registerForActivityResult(ActivityResultContracts.StartActivityForResult()){
         if (
             it.data?.getBooleanExtra("next",false) == true
@@ -122,6 +123,11 @@ class MainActivity : BaseActivity(), View.OnClickListener {
     override fun onClick(v: View?) {
        when(v){
            mBinding.storyBtn->{
+               if (!isConnection){//不让点击
+                   Toast.makeText(this@MainActivity,"先扫描链接大屏幕",Toast.LENGTH_SHORT).show()
+                   return
+               }
+
                if (curPosition!=-1){
                    val intent = Intent(this@MainActivity,StoryActivity::class.java)
                    intent.putExtra("curContent",contentDataList[curPosition])
@@ -131,6 +137,12 @@ class MainActivity : BaseActivity(), View.OnClickListener {
 
            }
            mBinding.redBtn->{
+
+               if (!isConnection){//不让点击
+                   Toast.makeText(this@MainActivity,getString(R.string.connect_tips),Toast.LENGTH_SHORT).show()
+                   return
+               }
+
                if (curPosition!=-1){
                    val intent = Intent(this@MainActivity,ReadActivity::class.java)
                    intent.putExtra("curContent",contentDataList[curPosition])
@@ -140,6 +152,11 @@ class MainActivity : BaseActivity(), View.OnClickListener {
            }
 
            mBinding.answerBtn->{
+               if (!isConnection){//不让点击
+                   Toast.makeText(this@MainActivity,getString(R.string.connect_tips),Toast.LENGTH_SHORT).show()
+                   return
+               }
+
                if (curPosition!=-1) {
                    val intent = Intent(this@MainActivity, QuestionActivity::class.java)
                    intent.putExtra("curContent", contentDataList[curPosition])
@@ -148,6 +165,12 @@ class MainActivity : BaseActivity(), View.OnClickListener {
                }
            }
            mBinding.sumBtn->{
+
+               if (!isConnection){//不让点击
+                   Toast.makeText(this@MainActivity,getString(R.string.connect_tips),Toast.LENGTH_SHORT).show()
+                   return
+               }
+
                if (curPosition!=-1) {
                    val intent = Intent(this@MainActivity, SummaryActivity::class.java)
                    intent.putExtra("curContent", contentDataList[curPosition])
@@ -160,14 +183,26 @@ class MainActivity : BaseActivity(), View.OnClickListener {
                setPermissionFun()
            }
            mBinding.backBtn->{//上一个
+               if (!isConnection){//不让点击
+                   Toast.makeText(this@MainActivity,getString(R.string.connect_tips),Toast.LENGTH_SHORT).show()
+                   return
+               }
+
                changeTagFun(-1)
            }
            mBinding.next->{//下一个
+
+               if (!isConnection){//不让点击
+                   Toast.makeText(this@MainActivity,getString(R.string.connect_tips),Toast.LENGTH_SHORT).show()
+                   return
+               }
+
                changeTagFun(1)
            }
        }
 
     }
+
 
     private fun setPermissionFun(){
 
@@ -263,9 +298,11 @@ class MainActivity : BaseActivity(), View.OnClickListener {
         when(msg){
             "socketfail"->{//连接失败
                 Toast.makeText(this,"和屏幕连接失败！",Toast.LENGTH_SHORT).show()
+                isConnection =false
             }
 
             "socketOk"->{//连接成功
+                isConnection = true
                 Toast.makeText(this,"和屏幕连接成功！",Toast.LENGTH_SHORT).show()
             }
         }

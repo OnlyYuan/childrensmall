@@ -13,11 +13,16 @@ class ReadViewModel(
     private val asrRepository: AsrRepository
 ) : ViewModel() {
 
+
+    suspend fun getReadSoreFun(filePath:String,filename:String,genDuId:String,sessionId:String):  Int?{
+        return asrRepository.getReadSoreFun(filePath,filename,genDuId,sessionId)
+    }
+
     /**
      * 语音转文字
      */
-    suspend fun getReadSoreFun(filePath:String,filename:String,genDuId:String,sessionId:String):  Int?{
-        return asrRepository.getReadSoreFun(filePath,filename,genDuId,sessionId)
+    suspend fun getASRFun(filePath:String,filename:String,sessionId:String):Any?{
+        return asrRepository.asrAudioToTextFun(filePath,filename,sessionId)
     }
 
 

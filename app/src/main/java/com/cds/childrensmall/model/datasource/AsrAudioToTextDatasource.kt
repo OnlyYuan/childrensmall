@@ -21,7 +21,7 @@ class AsrAudioToTextDatasource {
     /**
      * 获取全局数据
      */
-    suspend fun load(filePath:String,filename:String): AsrMessageDataBean? {
+    suspend fun load(filePath:String,filename:String,sessionId:String): AsrMessageDataBean? {
           val file = File(filePath)
           val requestBody = RequestBody.create("multipart/form-data".toMediaTypeOrNull(),file)
           val filePart = MultipartBody.Part.createFormData("file",filename,requestBody)
@@ -30,6 +30,7 @@ class AsrAudioToTextDatasource {
                 .getInstance()
                 .getService<ApiService>()
                 .asrFun(
+                    sessionId,
                     filePart
                 )
                 .getDataIfSuccess()

@@ -4,8 +4,9 @@ import android.Manifest
 import android.content.Intent
 import android.content.pm.PackageManager
 import android.media.AudioFormat
+import android.media.AudioManager
 import android.media.AudioRecord
-import android.media.MediaPlayer
+import android.media.AudioTrack
 import android.media.MediaRecorder
 import android.os.Build
 import android.os.Bundle
@@ -25,20 +26,21 @@ import com.cds.childrensmall.common.readNextVoiceBtn
 import com.cds.childrensmall.common.readRecordOkScore
 import com.cds.childrensmall.common.readScore
 import com.cds.childrensmall.common.readStartReadBtn
-import com.cds.childrensmall.databinding.ActivityMainBinding
 import com.cds.childrensmall.databinding.ActivityReadBinding
 import com.cds.childrensmall.model.bean.ConfigDataBean
-import com.cds.childrensmall.util.RecordingUtil
 import com.cds.childrensmall.util.net.DataHandler
 import com.cds.childrensmall.util.totalReadScore
-import com.cds.childrensmall.viewmodel.MainViewModel
 import com.cds.childrensmall.viewmodel.ReadViewModel
 import kotlinx.coroutines.launch
 import org.greenrobot.eventbus.EventBus
 import org.greenrobot.eventbus.Subscribe
 import org.greenrobot.eventbus.ThreadMode
 import org.koin.androidx.viewmodel.ext.android.viewModel
+import java.io.BufferedInputStream
+import java.io.DataInputStream
 import java.io.File
+import java.io.FileInputStream
+import java.io.FileNotFoundException
 import java.io.FileOutputStream
 import java.io.IOException
 
@@ -46,7 +48,8 @@ import java.io.IOException
 class ReadActivity : BaseActivity(), View.OnClickListener {
 
     private val TAG = "AudioRecordDemo"
-    private val SAMPLE_RATE = 44100
+    private val SAMPLE_RATE = 16000
+   // private val CHANNEL_CONFIG = AudioFormat.CHANNEL_OUT_STEREO
     private val CHANNEL_CONFIG = AudioFormat.CHANNEL_IN_MONO
     private val AUDIO_FORMAT = AudioFormat.ENCODING_PCM_16BIT
     private val BUFFER_SIZE =
@@ -113,7 +116,6 @@ class ReadActivity : BaseActivity(), View.OnClickListener {
             }
 
             mBinding.nextBtn->{//下一段
-                curPosition++
                 doNextFun()
             }
         }
@@ -146,7 +148,8 @@ class ReadActivity : BaseActivity(), View.OnClickListener {
             ) != PackageManager.PERMISSION_GRANTED
         ) {
             permissionLauncher.launch(
-                arrayOf( Manifest.permission.RECORD_AUDIO,
+                arrayOf(
+                    Manifest.permission.RECORD_AUDIO,
                     Manifest.permission.WRITE_EXTERNAL_STORAGE,
                 )
                )
@@ -224,6 +227,7 @@ class ReadActivity : BaseActivity(), View.OnClickListener {
                 },
                 onSuccess = {
                     Log.i("11","--->成功${it}")
+                    Log.i("11","--->跟读id${genduList[curPosition].id?:""}")
                     val mScore = it?:0
 //                    if (){ //为1的时候重读，并标记次数
 //                        errorCount ++
@@ -255,6 +259,32 @@ class ReadActivity : BaseActivity(), View.OnClickListener {
             )
         }
     }
+
+
+    /**
+     * 语音转文字
+     */
+    private fun asrAudioToTextFun(filePath:String,filename:String){
+
+        lifecycleScope.launch {
+            DataHandler.performCollect(
+                this@ReadActivity,
+                block = {
+                    mViewModel.getASRFun(filePath,filename,"1858101602711")
+                },
+                onError = {
+                    Log.i("11","--->失败")
+
+                },
+                onSuccess = {
+                    Log.i("11","--->成功${it}")
+
+                }
+            )
+        }
+    }
+
+
 
     override fun onDestroy() {
         super.onDestroy()
@@ -298,8 +328,11 @@ class ReadActivity : BaseActivity(), View.OnClickListener {
         }
 
         override fun onFinish() {
+            if (curPosition<genduList.size){
+                curPosition ++
+            }
             EventBus.getDefault().post(readNextVoiceBtn)
         }
-
     }
+
 }

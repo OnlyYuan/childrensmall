@@ -28,6 +28,7 @@ interface ApiService {
     @Multipart
     @POST("/imApi/free/voiceToText")
     suspend fun asrFun(
+        @Query("sessionId") sessionId:String,
         @Part file : MultipartBody.Part
     ):ResultModel<AsrMessageDataBean?>
 

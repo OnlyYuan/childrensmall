@@ -22,8 +22,8 @@ class AsrRepository(
      * 语音转文字
      *
      */
-    suspend fun asrAudioToTextFun(filePath:String,filename:String): AsrMessageDataBean?{
-        return  asrAudioToTextDatasource.load(filePath,filename)
+    suspend fun asrAudioToTextFun(filePath:String,filename:String,sessionId:String): AsrMessageDataBean?{
+        return  asrAudioToTextDatasource.load(filePath,filename,sessionId)
     }
 
 
