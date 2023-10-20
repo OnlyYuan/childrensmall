@@ -22,6 +22,7 @@ import com.cds.childrensmall.base.BaseActivity
 import com.cds.childrensmall.common.readBackeBtn
 import com.cds.childrensmall.common.readGoAnswerBtn
 import com.cds.childrensmall.common.readNextVoiceBtn
+import com.cds.childrensmall.common.readRecordOkScore
 import com.cds.childrensmall.common.readScore
 import com.cds.childrensmall.common.readStartReadBtn
 import com.cds.childrensmall.databinding.ActivityMainBinding
@@ -63,6 +64,7 @@ class ReadActivity : BaseActivity(), View.OnClickListener {
     private var genduList = ArrayList<ConfigDataBean.GenDuBean>()//跟读列表
     private var curPosition = 0//跟读的position
     private var curProcess = 0 //当前进度
+    private var errorCount = 0//读错次数  只能重读两次
 
     private val permissionLauncher = registerForActivityResult(ActivityResultContracts.RequestMultiplePermissions()){
         startRecording()
@@ -170,6 +172,7 @@ class ReadActivity : BaseActivity(), View.OnClickListener {
         Log.i(TAG,"保存地址：${path}")
         mIsRecording = true
         mAudioRecord!!.startRecording()
+        mBinding.recordBtn.setImageResource(R.mipmap.reconder_icon)
         Thread {
             try {
                 val outputStream = FileOutputStream(mOutputFile)
@@ -190,6 +193,8 @@ class ReadActivity : BaseActivity(), View.OnClickListener {
     }
 
    private fun stopRecording() {
+       mBinding.recordBtn.setImageResource(R.mipmap.reconder_close_icon)
+       EventBus.getDefault().post(readRecordOkScore)
         if (mAudioRecord != null) {
             mIsRecording = false
             mAudioRecord!!.stop()
@@ -219,10 +224,33 @@ class ReadActivity : BaseActivity(), View.OnClickListener {
                 },
                 onSuccess = {
                     Log.i("11","--->成功${it}")
-                    totalReadScore += it?:0
-                    EventBus.getDefault().post("${readScore}?${it?:0}")
-                    val waitCounterTime = WaitCounterTime(4000L,1000L)
-                    waitCounterTime.start()
+                    val mScore = it?:0
+//                    if (){ //为1的时候重读，并标记次数
+//                        errorCount ++
+//                    }else{//大于1时，直接到下一步
+//                        totalReadScore += it?:0
+//                        errorCount =0
+//                    }
+//                    if (errorCount >3){ //第四次归零 实际正常一遍 复读两遍
+//                        errorCount =0
+//                    }
+
+                    if (mScore>1){//分数大于1
+                        errorCount = 0
+                        totalReadScore += mScore
+                    } else if (errorCount==3){ //复读完两次
+                        totalReadScore += mScore
+                    }else  {//没到两次复读
+                        errorCount ++
+                    }
+
+                    EventBus.getDefault().post("${readScore}?${it?:0}?$errorCount")
+                    if (errorCount==0||errorCount==3){
+                        errorCount =0
+                        val waitCounterTime = WaitCounterTime(4000L,1000L)
+                        waitCounterTime.start()
+                    }
+
                 }
             )
         }
@@ -251,7 +279,6 @@ class ReadActivity : BaseActivity(), View.OnClickListener {
         override fun onTick(millisUntilFinished: Long) {
             curProcess-=countInterval.toInt()
             mBinding.progress.progress = curProcess
-            Log.i("11","-->curProcess${curProcess}")
         }
 
         override fun onFinish() {
@@ -259,7 +286,6 @@ class ReadActivity : BaseActivity(), View.OnClickListener {
             curProcess= 0
             stopRecording()
         }
-
     }
 
     /**

@@ -128,6 +128,7 @@ class QuestionActivity : BaseActivity(), View.OnClickListener {
                         currentNode = it1.current!!
                         questionNodeList.clear()
                         it1.children?.let { it2 ->
+                            mBinding.showStarView.visibility = View.GONE
                             questionNodeList.addAll(it2)
 
                         }
@@ -139,6 +140,14 @@ class QuestionActivity : BaseActivity(), View.OnClickListener {
                                 isSuccess = true
                                 val myCountIme1 = WaitCounterTime(it.current?.nodeId?:"",2000L,1000L)
                                 myCountIme1.start()
+                                mBinding.showStarView.visibility = View.VISIBLE
+
+                                if(it.current!!.content == "Well done!"){
+                                    mBinding.scoreImg.setImageResource(R.mipmap.well_done)
+                                }else{
+                                    mBinding.scoreImg.setImageResource(R.mipmap.good_job)
+                                }
+
                                 totalAnswerScore+=3
                             }
                             "end"->{//结束
@@ -164,6 +173,7 @@ class QuestionActivity : BaseActivity(), View.OnClickListener {
         }
 
         override fun onFinish() {
+
             if (isSuccess){//成功后，等2s播放下一個
                 startNextQuestion(nodeId)
                 isSuccess = false

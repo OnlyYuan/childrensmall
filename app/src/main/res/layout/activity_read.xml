@@ -50,7 +50,7 @@
             android:id="@+id/recordBtn"
             android:layout_width="100dp"
             android:layout_height="100dp"
-            android:src="@mipmap/reconder_icon"
+            android:src="@mipmap/reconder_close_icon"
             android:layout_marginTop="40dp"
             android:clickable="true"
             android:focusable="true"
