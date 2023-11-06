@@ -146,11 +146,16 @@ class ReadActivity : BaseActivity(), View.OnClickListener {
                 this@ReadActivity,
                 Manifest.permission.WRITE_EXTERNAL_STORAGE
             ) != PackageManager.PERMISSION_GRANTED
+            &&ActivityCompat.checkSelfPermission(
+                this@ReadActivity,
+                Manifest.permission.READ_EXTERNAL_STORAGE
+            ) != PackageManager.PERMISSION_GRANTED
         ) {
             permissionLauncher.launch(
                 arrayOf(
                     Manifest.permission.RECORD_AUDIO,
                     Manifest.permission.WRITE_EXTERNAL_STORAGE,
+                    Manifest.permission.READ_EXTERNAL_STORAGE,
                 )
                )
             return
