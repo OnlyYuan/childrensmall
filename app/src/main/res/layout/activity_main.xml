@@ -26,6 +26,7 @@
             app:layout_constraintTop_toTopOf="parent" />
 
         <ImageView
+            android:id="@+id/bearGif"
             android:layout_width="300dp"
             android:layout_height="300dp"
             android:src="@mipmap/bear_main"

@@ -14,6 +14,17 @@
     <uses-permission android:name="android.permission.READ_EXTERNAL_STORAGE" />
     <uses-permission android:name="android.permission.WRITE_EXTERNAL_STORAGE" />
     <uses-permission android:name="android.permission.FLASHLIGHT" />
+    <uses-permission android:name="android.permission.ACCESS_NETWORK_STATE" /> <!-- 获取网络状态 -->
+    <uses-permission
+        android:name="android.permission.READ_PRIVILEGED_PHONE_STATE"
+        tools:ignore="ProtectedPermissions" />
+    <uses-permission android:name="android.permission.INTERNET" /> <!-- 网络通信-->
+    <uses-permission android:name="android.permission.READ_PHONE_STATE" />  <!-- 获取设备信息 -->
+    <uses-permission android:name="android.permission.ACCESS_WIFI_STATE" /> <!-- 获取网络信息权限-->
+
+    <!-- 用户手机设置中允许未知来源安装包安装状态为关；-->
+    <!-- Android8.0 以后，如果要安装 apk 需要额外添加权限：-->
+    <uses-permission android:name="android.permission.REQUEST_INSTALL_PACKAGES" />
 
     <application
         android:name=".MyApplication"
@@ -27,6 +38,8 @@
         android:theme="@style/Theme.Childrensmall"
         android:usesCleartextTraffic="true"
         tools:targetApi="31">
+
+
         <activity
             android:name=".ui.SummaryActivity"
             android:configChanges="orientation|keyboardHidden|screenSize"
@@ -82,6 +95,14 @@
             <!-- <category android:name="android.intent.category.LAUNCHER" /> -->
             <!-- </intent-filter> -->
         </activity>
+
+        <meta-data
+            android:name="PGYER_API_KEY"
+            android:value="45b6213be741b838a966367931546a2b"/>
+        <meta-data
+            android:name="PGYER_FRONTJS_KEY"
+            android:value="7a8d832ad10bf7334ee6cdbf73325bb9"/>
+
     </application>
 
 </manifest>

@@ -12,6 +12,7 @@ import androidx.activity.result.contract.ActivityResultContracts
 import androidx.core.content.ContextCompat
 import androidx.databinding.DataBindingUtil
 import androidx.lifecycle.lifecycleScope
+import com.bumptech.glide.Glide
 import com.cds.childrensmall.R
 import com.cds.childrensmall.databinding.ActivityMainBinding
 import com.cds.childrensmall.base.BaseActivity
@@ -118,6 +119,9 @@ class MainActivity : BaseActivity(), View.OnClickListener {
             SharedPreferencesUtils.NICK_NAME,
             ""))?:""
         mBinding.nickName.text = totalNickname
+        Glide.with(this@MainActivity)
+            .load(R.mipmap.bear_wave)
+            .into(mBinding.bearGif)
     }
 
     override fun onClick(v: View?) {
