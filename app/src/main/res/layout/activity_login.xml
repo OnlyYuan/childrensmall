@@ -51,6 +51,7 @@
                 android:textStyle="bold"
                 android:paddingStart="25dp"
                 android:layout_marginTop="15dp"
+                android:imeOptions="flagNoExtractUi"
                 android:background="@drawable/login_input_bg_shape"/>
 
             <EditText
@@ -59,6 +60,7 @@
                 android:layout_height="45dp"
                 android:hint="请输入手机号码"
                 android:inputType="phone"
+                android:imeOptions="flagNoExtractUi"
                 android:textColorHint="@color/text_hint_blue"
                 android:textColor="@color/text_blue"
                 android:textStyle="bold"
@@ -82,6 +84,7 @@
                     android:layout_height="45dp"
                     android:background="@null"
                     android:hint="输入验证码"
+                    android:imeOptions="flagNoExtractUi"
                     android:inputType="number"
                     android:textColorHint="@color/text_hint_blue"
                     android:textColor="@color/text_blue"

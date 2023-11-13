@@ -2,6 +2,10 @@ package com.cds.childrensmall.common
 
 
 //接收信息
+/**
+ * 发送small 发送 unity信息
+ */
+val unitySmallToBigString = "unity/smallToBig"
 
 /**
  * MainActivity

@@ -13,6 +13,7 @@ import com.cds.childrensmall.common.storyNextBtn
 import com.cds.childrensmall.common.storyPlayBtn
 import com.cds.childrensmall.databinding.ActivityStoryBinding
 import com.cds.childrensmall.model.bean.ConfigDataBean
+import com.cds.childrensmall.util.totalCurrentLevel
 import org.greenrobot.eventbus.EventBus
 
 /**
@@ -52,6 +53,7 @@ class StoryActivity : BaseActivity(), View.OnClickListener {
                val intent = Intent(this@StoryActivity,ReadActivity::class.java)
                intent.putExtra("curContent",curContent)
                startActivity(intent)
+               totalCurrentLevel += totalCurrentLevel
                this@StoryActivity.finish()
            }
 

@@ -10,6 +10,7 @@ import com.cds.childrensmall.common.summaryGoNext
 import com.cds.childrensmall.databinding.ActivitySummaryBinding
 import com.cds.childrensmall.model.bean.ConfigDataBean
 import com.cds.childrensmall.util.totalAnswerScore
+import com.cds.childrensmall.util.totalCurrentLevel
 import com.cds.childrensmall.util.totalGameScore
 import com.cds.childrensmall.util.totalReadScore
 import org.greenrobot.eventbus.EventBus
@@ -41,6 +42,7 @@ class SummaryActivity : BaseActivity() {
         mBinding.totalStar.text = getString(R.string.star_num_string,totalScore.toString())
         mBinding.goNext.setOnClickListener { //下一章节
             EventBus.getDefault().post(summaryGoNext)
+            totalCurrentLevel = 0
             val intent = Intent()
             intent.putExtra("next",true)
             this@SummaryActivity.setResult(101,intent)

@@ -18,6 +18,7 @@ import androidx.activity.result.contract.ActivityResultContracts
 import androidx.core.app.ActivityCompat
 import androidx.databinding.DataBindingUtil
 import androidx.lifecycle.lifecycleScope
+import com.bumptech.glide.Glide
 import com.cds.childrensmall.R
 import com.cds.childrensmall.base.BaseActivity
 import com.cds.childrensmall.common.readBackeBtn
@@ -29,6 +30,7 @@ import com.cds.childrensmall.common.readStartReadBtn
 import com.cds.childrensmall.databinding.ActivityReadBinding
 import com.cds.childrensmall.model.bean.ConfigDataBean
 import com.cds.childrensmall.util.net.DataHandler
+import com.cds.childrensmall.util.totalCurrentLevel
 import com.cds.childrensmall.util.totalReadScore
 import com.cds.childrensmall.viewmodel.ReadViewModel
 import kotlinx.coroutines.launch
@@ -92,6 +94,10 @@ class ReadActivity : BaseActivity(), View.OnClickListener {
         curContent?.genDu?.let {
             genduList.addAll(it)
         }
+
+        Glide.with(this@ReadActivity)
+            .load(R.mipmap.bear_listen)
+            .into(mBinding.bearGif)
     }
 
 
@@ -131,6 +137,7 @@ class ReadActivity : BaseActivity(), View.OnClickListener {
             EventBus.getDefault().post(readGoAnswerBtn)
             val intent = Intent(this@ReadActivity, QuestionActivity::class.java)
             intent.putExtra("curContent", curContent)
+            totalCurrentLevel += totalCurrentLevel
             startActivity(intent)
             this@ReadActivity.finish()
 //        }

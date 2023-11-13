@@ -6,6 +6,7 @@ import android.os.IBinder
 import android.util.Log
 import com.cds.childrensmall.common.mainTouchStoryBtn
 import com.cds.childrensmall.common.readStartReadBtn
+import com.cds.childrensmall.common.unitySmallToBigString
 import com.cds.childrensmall.util.MySocket
 import org.greenrobot.eventbus.EventBus
 import org.greenrobot.eventbus.Subscribe
@@ -50,6 +51,17 @@ class ClientSocketService : Service() {
         if (mySocket.isSuccess){
             mySocket.sendMessage(msg)
         }
+    }
+
+    /**
+     * 发送unity信息
+     */
+    private fun sendUnityMessage(msg:String){
+        val mString = "${unitySmallToBigString}?$msg"
+        if (mySocket.isSuccess){
+            mySocket.sendMessage(msg)
+        }
+        Log.i("11","-->调用了sendUnityMessage方法")
     }
 
     override fun onDestroy() {
