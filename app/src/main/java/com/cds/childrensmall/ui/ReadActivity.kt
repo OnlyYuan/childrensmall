@@ -15,8 +15,10 @@ import android.os.Environment
 import android.util.Log
 import android.view.View
 import androidx.activity.result.contract.ActivityResultContracts
+import androidx.annotation.MainThread
 import androidx.core.app.ActivityCompat
 import androidx.databinding.DataBindingUtil
+import androidx.lifecycle.Lifecycle
 import androidx.lifecycle.lifecycleScope
 import com.bumptech.glide.Glide
 import com.cds.childrensmall.R
@@ -30,10 +32,13 @@ import com.cds.childrensmall.common.readStartReadBtn
 import com.cds.childrensmall.common.widget.TransitionDialog
 import com.cds.childrensmall.databinding.ActivityReadBinding
 import com.cds.childrensmall.model.bean.ConfigDataBean
+import com.cds.childrensmall.util.PcmToWavUtil
+import com.cds.childrensmall.util.PcmToWavUtil.OnSuccessFunLisener
 import com.cds.childrensmall.util.net.DataHandler
 import com.cds.childrensmall.util.totalCurrentLevel
 import com.cds.childrensmall.util.totalReadScore
 import com.cds.childrensmall.viewmodel.ReadViewModel
+import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
 import org.greenrobot.eventbus.EventBus
 import org.greenrobot.eventbus.Subscribe
@@ -207,6 +212,7 @@ class ReadActivity : BaseActivity(), View.OnClickListener {
             }
         }.start()
         curProcess = 5000
+        mBinding.bearGif.visibility = View.VISIBLE
         val myCountIme = MyCounterTime(5000L,50L)
         myCountIme.start()
     }
@@ -221,8 +227,12 @@ class ReadActivity : BaseActivity(), View.OnClickListener {
             mAudioRecord = null
         }
         Log.i("11","-->录制完成")
+       lifecycleScope.launch(Dispatchers.IO) {
+           changePcmToWav()
+       }
+
       // asrAudioToTextFun(path,"recording.pcm")
-       getReadSoreFun(path,"recording.pcm")
+
     }
 
 
@@ -244,7 +254,7 @@ class ReadActivity : BaseActivity(), View.OnClickListener {
                 onSuccess = {
                     Log.i("11","--->成功${it}")
                     Log.i("11","--->跟读id${genduList[curPosition].id?:""}")
-                    val mScore = it?:0
+                    val mScore = it?.score?:0
 //                    if (){ //为1的时候重读，并标记次数
 //                        errorCount ++
 //                    }else{//大于1时，直接到下一步
@@ -260,11 +270,18 @@ class ReadActivity : BaseActivity(), View.OnClickListener {
                         totalReadScore += mScore
                     } else if (errorCount==3){ //复读完两次
                         totalReadScore += mScore
+
                     }else  {//没到两次复读
                         errorCount ++
                     }
 
-                    EventBus.getDefault().post("${readScore}?${it?:0}?$errorCount")
+                    if (errorCount ==3){//专门为第三次还读错
+                        totalReadScore += mScore
+                    }
+
+                    Log.i("11","-->复读完${errorCount}")
+
+                    EventBus.getDefault().post("${readScore}?${it?.score?:0}?$errorCount?${it?.audioPath?:""}")
                     if (errorCount==0||errorCount==3){
                         errorCount =0
 //                        val waitCounterTime = WaitCounterTime(4000L,1000L)
@@ -274,6 +291,33 @@ class ReadActivity : BaseActivity(), View.OnClickListener {
                 }
             )
         }
+    }
+
+    /**
+     * pcm to mav
+     */
+    private fun changePcmToWav(){
+       val  mPath = if (Build.VERSION.SDK_INT>=29){
+            getExternalFilesDir(null)?.absolutePath
+        } else{
+            Environment.getExternalStorageDirectory().absolutePath + "/recording.pcm"
+        }
+       val pcmToWavUtil =  PcmToWavUtil.getInstance()
+        pcmToWavUtil.pcmToWav("$mPath/recording.pcm", "$mPath/recording.wav",
+
+            object :OnSuccessFunLisener{
+                override fun onSuccessFun() {
+                    Log.i("11","-->zhuanhuanchengg")
+                    getReadSoreFun("$mPath/recording.wav","recording.wav")
+                }
+
+                override fun onOnFail() {
+                    Log.i("11","-->shibai")
+                }
+
+            })
+
+
     }
 
 
@@ -336,6 +380,7 @@ class ReadActivity : BaseActivity(), View.OnClickListener {
             mBinding.progress.progress = 0
             curProcess= 0
             stopRecording()
+            mBinding.bearGif.visibility = View.GONE
         }
     }
 

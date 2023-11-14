@@ -2,6 +2,7 @@ package com.cds.childrensmall.model.api
 
 import com.cds.childrensmall.model.bean.AsrMessageDataBean
 import com.cds.childrensmall.model.bean.ConfigDataBean
+import com.cds.childrensmall.model.bean.ScoreBean
 import com.cds.childrensmall.model.bean.StartAnswerBean
 import com.cds.childrensmall.util.net.ResultModel
 import com.google.gson.JsonObject
@@ -41,7 +42,7 @@ interface ApiService {
         @Query("genDuId") genDuId:String,
         @Query("sessionId") sessionId:String,
         @Part file : MultipartBody.Part,
-    ):ResultModel<Int?>
+    ):ResultModel<ScoreBean?>
 
     /**
      * 开始答题准备

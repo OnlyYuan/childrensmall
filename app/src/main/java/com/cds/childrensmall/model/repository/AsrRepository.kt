@@ -2,6 +2,7 @@ package com.cds.childrensmall.model.repository
 
 import com.cds.childrensmall.model.bean.AsrMessageDataBean
 import com.cds.childrensmall.model.bean.ConfigDataBean
+import com.cds.childrensmall.model.bean.ScoreBean
 import com.cds.childrensmall.model.datasource.AsrAudioToTextDatasource
 import com.cds.childrensmall.model.datasource.GetConfigDatasource
 import com.cds.childrensmall.model.datasource.GetReadScoreDatasource
@@ -31,7 +32,7 @@ class AsrRepository(
      *
      * 获取跟读评分
      */
-    suspend fun getReadSoreFun(filePath:String,filename:String,genDuId:String,sessionId:String): Int?{
+    suspend fun getReadSoreFun(filePath:String,filename:String,genDuId:String,sessionId:String): ScoreBean?{
         return  getReadScoreDatasource.load(filePath,filename,genDuId,sessionId)
     }
 

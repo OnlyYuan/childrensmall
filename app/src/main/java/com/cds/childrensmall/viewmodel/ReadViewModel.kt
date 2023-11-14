@@ -4,6 +4,7 @@ import android.content.Context
 import androidx.lifecycle.ViewModel
 import com.cds.childrensmall.model.bean.AsrMessageDataBean
 import com.cds.childrensmall.model.bean.ConfigDataBean
+import com.cds.childrensmall.model.bean.ScoreBean
 import com.cds.childrensmall.model.repository.AsrRepository
 import com.cds.childrensmall.model.repository.DataRepository
 import com.cds.childrensmall.model.repository.LoginRepository
@@ -14,7 +15,7 @@ class ReadViewModel(
 ) : ViewModel() {
 
 
-    suspend fun getReadSoreFun(filePath:String,filename:String,genDuId:String,sessionId:String):  Int?{
+    suspend fun getReadSoreFun(filePath:String,filename:String,genDuId:String,sessionId:String):  ScoreBean?{
         return asrRepository.getReadSoreFun(filePath,filename,genDuId,sessionId)
     }
 
