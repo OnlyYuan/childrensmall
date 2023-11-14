@@ -28,16 +28,10 @@
             android:layout_width="60dp"
             android:layout_height="60dp"
             android:src="@mipmap/bear_play"
-            android:layout_marginStart="100dp"
+            android:layout_marginStart="80dp"
             app:layout_constraintBottom_toTopOf="@+id/progress"
             app:layout_constraintStart_toStartOf="parent" />
 
-        <Button
-            android:id="@+id/btn"
-            android:layout_width="60dp"
-            android:layout_height="60dp"
-            app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toTopOf="parent" />
 
     </androidx.constraintlayout.widget.ConstraintLayout>
 

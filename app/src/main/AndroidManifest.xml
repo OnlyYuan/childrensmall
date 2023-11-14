@@ -37,19 +37,6 @@
         android:theme="@style/Theme.Childrensmall"
         android:usesCleartextTraffic="true"
         tools:targetApi="31">
-        <activity
-            android:name=".ui.TransitionActivity"
-            android:configChanges="orientation|keyboardHidden|screenSize"
-            android:exported="true"
-            android:screenOrientation="landscape" >
-
-<!--            <intent-filter>-->
-<!--                <action android:name="android.intent.action.MAIN" />-->
-
-<!--                <category android:name="android.intent.category.LAUNCHER" />-->
-<!--            </intent-filter>-->
-
-        </activity>
 
         <activity
             android:name=".ui.MySplashActivity"
@@ -66,16 +53,19 @@
             android:name=".ui.SummaryActivity"
             android:configChanges="orientation|keyboardHidden|screenSize"
             android:exported="true"
+            android:launchMode="singleTop"
             android:screenOrientation="landscape" />
         <activity
             android:name=".ui.QuestionActivity"
             android:configChanges="orientation|keyboardHidden|screenSize"
             android:exported="true"
+            android:launchMode="singleTop"
             android:screenOrientation="landscape" />
         <activity
             android:name=".ui.ReadActivity"
             android:configChanges="orientation|keyboardHidden|screenSize"
             android:exported="true"
+            android:launchMode="singleTop"
             android:screenOrientation="landscape" />
         <activity
             android:name=".ui.LoginActivity"
@@ -94,6 +84,7 @@
             android:name=".ui.StoryActivity"
             android:configChanges="orientation|keyboardHidden|screenSize"
             android:exported="true"
+            android:launchMode="singleTop"
             android:screenOrientation="landscape" />
 
         <service

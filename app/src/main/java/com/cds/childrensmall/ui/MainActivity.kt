@@ -26,6 +26,7 @@ import com.cds.childrensmall.common.mainTouchAnswerBtn
 import com.cds.childrensmall.common.mainTouchGameBtn
 import com.cds.childrensmall.common.mainTouchReadBtn
 import com.cds.childrensmall.common.mainTouchStoryBtn
+import com.cds.childrensmall.common.widget.TransitionDialog
 import com.cds.childrensmall.model.bean.ConfigDataBean
 import com.cds.childrensmall.service.ClientSocketService
 import com.cds.childrensmall.util.SharedPreferencesUtils
@@ -57,6 +58,7 @@ class MainActivity : BaseActivity(), View.OnClickListener {
     private var isConnection = false  //是否连接
     private var rotateAnimation:ObjectAnimator?=null //光圈的旋转动画
     private var lastView:View? = null //上一个动画view
+    private var transitionDialog: TransitionDialog?= null //过渡页面
 
     private val summaryLauncher = registerForActivityResult(ActivityResultContracts.StartActivityForResult()){
         if (
@@ -155,9 +157,15 @@ class MainActivity : BaseActivity(), View.OnClickListener {
 
                if (curPosition!=-1){
                    totalCurrentLevel=0
-                   val intent = Intent(this@MainActivity,StoryActivity::class.java)
-                   intent.putExtra("curContent",contentDataList[curPosition])
-                   startActivity(intent)
+
+                   transitionDialog = TransitionDialog()
+                   transitionDialog?.show(supportFragmentManager,"transitionDialog")
+                   transitionDialog?.setGoNextFun {
+                       val intent = Intent(this@MainActivity,StoryActivity::class.java)
+                       intent.putExtra("curContent",contentDataList[curPosition])
+                       startActivity(intent)
+                   }
+                   Log.i("11","------->qw123123123")
                    EventBus.getDefault().post(mainTouchStoryBtn)
                }
 
@@ -171,9 +179,15 @@ class MainActivity : BaseActivity(), View.OnClickListener {
 
                if (curPosition!=-1){
                    totalCurrentLevel =1
-                   val intent = Intent(this@MainActivity,ReadActivity::class.java)
-                   intent.putExtra("curContent",contentDataList[curPosition])
-                   startActivity(intent)
+
+                   transitionDialog = TransitionDialog()
+                   transitionDialog?.show(supportFragmentManager,"transitionDialog")
+                   transitionDialog?.setGoNextFun {
+                       val intent = Intent(this@MainActivity,ReadActivity::class.java)
+                       intent.putExtra("curContent",contentDataList[curPosition])
+                       startActivity(intent)
+                   }
+
                    EventBus.getDefault().post(mainTouchReadBtn)
                }
            }
@@ -186,9 +200,15 @@ class MainActivity : BaseActivity(), View.OnClickListener {
 
                if (curPosition!=-1) {
                    totalCurrentLevel =2
-                   val intent = Intent(this@MainActivity, QuestionActivity::class.java)
-                   intent.putExtra("curContent", contentDataList[curPosition])
-                   startActivity(intent)
+
+                   transitionDialog = TransitionDialog()
+                   transitionDialog?.show(supportFragmentManager,"transitionDialog")
+                   transitionDialog?.setGoNextFun {
+                       val intent = Intent(this@MainActivity, QuestionActivity::class.java)
+                       intent.putExtra("curContent", contentDataList[curPosition])
+                       startActivity(intent)
+                   }
+
                    EventBus.getDefault().post(mainTouchAnswerBtn)
                }
            }
@@ -213,11 +233,18 @@ class MainActivity : BaseActivity(), View.OnClickListener {
                    return
                }
 
+
                if (curPosition!=-1) {
                    totalCurrentLevel =4
-                   val intent = Intent(this@MainActivity, SummaryActivity::class.java)
-                   intent.putExtra("curContent", contentDataList[curPosition])
-                   summaryLauncher.launch(intent)
+
+                   transitionDialog = TransitionDialog()
+                   transitionDialog?.show(supportFragmentManager,"transitionDialog")
+                   transitionDialog?.setGoNextFun {
+                       val intent = Intent(this@MainActivity, SummaryActivity::class.java)
+                       intent.putExtra("curContent", contentDataList[curPosition])
+                       summaryLauncher.launch(intent)
+                   }
+
                    EventBus.getDefault().post(mainToucSummaryBtn)
                }
            }
@@ -411,6 +438,12 @@ class MainActivity : BaseActivity(), View.OnClickListener {
     private fun showTagUi(){
         mBinding.contentName.text = contentDataList[curPosition].name ?: ""
     }
+
+    override fun onPause() {
+        super.onPause()
+
+    }
+
 
     override fun onDestroy() {
         super.onDestroy()
