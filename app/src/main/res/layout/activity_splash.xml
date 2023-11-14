@@ -18,12 +18,11 @@
         <TextView
             android:id="@+id/goLogin"
             android:layout_width="100dp"
-            android:layout_height="100dp"
-            android:background="@color/text_code_green"
+            android:layout_height="200dp"
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toTopOf="parent" />
+            />
 
 
     </androidx.constraintlayout.widget.ConstraintLayout>

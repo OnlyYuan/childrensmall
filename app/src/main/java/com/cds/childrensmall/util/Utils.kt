@@ -5,6 +5,7 @@ import android.content.res.AssetManager
 import android.content.res.Resources
 import android.text.Spannable
 import android.text.SpannableStringBuilder
+import android.view.inputmethod.InputMethodManager
 import java.io.BufferedReader
 import java.io.IOException
 import java.io.InputStreamReader
@@ -194,7 +195,7 @@ var totalSessionId = "000"
 
 //当前关卡进度
 var totalCurrentLevel = 0
-
+val Context.inputMethodManager: InputMethodManager get() = applicationContext.getSystemService(Context.INPUT_METHOD_SERVICE) as InputMethodManager
 /**
  * 分割图片的地址 eg  img:/profile/images/v2/cat.png
  */

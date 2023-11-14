@@ -27,6 +27,7 @@ import com.cds.childrensmall.common.readNextVoiceBtn
 import com.cds.childrensmall.common.readRecordOkScore
 import com.cds.childrensmall.common.readScore
 import com.cds.childrensmall.common.readStartReadBtn
+import com.cds.childrensmall.common.widget.TransitionDialog
 import com.cds.childrensmall.databinding.ActivityReadBinding
 import com.cds.childrensmall.model.bean.ConfigDataBean
 import com.cds.childrensmall.util.net.DataHandler
@@ -121,26 +122,29 @@ class ReadActivity : BaseActivity(), View.OnClickListener {
                 this@ReadActivity.finish()
             }
 
-            mBinding.nextBtn->{//下一段
+            mBinding.nextBtn->{//到问答
                 doNextFun()
             }
         }
     }
 
     /**
-     * 下一段按钮
+     * 到问答按钮
      */
     private fun doNextFun(){
-//        if (curPosition<genduList.size){
-//            EventBus.getDefault().post(readNextVoiceBtn)
-//        }else{
-            EventBus.getDefault().post(readGoAnswerBtn)
+
+        EventBus.getDefault().post(readGoAnswerBtn)
+
+        val transitionDialog = TransitionDialog()
+        transitionDialog.show(supportFragmentManager,"transitionDialog")
+        transitionDialog.setGoNextFun {
             val intent = Intent(this@ReadActivity, QuestionActivity::class.java)
             intent.putExtra("curContent", curContent)
             totalCurrentLevel += totalCurrentLevel
             startActivity(intent)
             this@ReadActivity.finish()
-//        }
+        }
+
     }
 
 
@@ -263,8 +267,8 @@ class ReadActivity : BaseActivity(), View.OnClickListener {
                     EventBus.getDefault().post("${readScore}?${it?:0}?$errorCount")
                     if (errorCount==0||errorCount==3){
                         errorCount =0
-                        val waitCounterTime = WaitCounterTime(4000L,1000L)
-                        waitCounterTime.start()
+//                        val waitCounterTime = WaitCounterTime(4000L,1000L)
+//                        waitCounterTime.start()
                     }
 
                 }
@@ -314,6 +318,11 @@ class ReadActivity : BaseActivity(), View.OnClickListener {
                 startRecording()
             }
 
+            readNextVoiceBtn ->{//读取下一段
+                if (curPosition<genduList.size){
+                    curPosition ++
+                }
+            }
         }
     }
 
@@ -343,7 +352,7 @@ class ReadActivity : BaseActivity(), View.OnClickListener {
             if (curPosition<genduList.size){
                 curPosition ++
             }
-            EventBus.getDefault().post(readNextVoiceBtn)
+          //  EventBus.getDefault().post(readNextVoiceBtn)
         }
     }
 

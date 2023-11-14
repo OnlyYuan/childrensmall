@@ -12,6 +12,7 @@
     <color name="text_blue">#0173AD</color>
     <color name="text_hint_blue">#037FB3</color>
     <color name="text_code_green">#009601</color>
+    <color name="yellow">#ffff00</color>
 
 
 </resources>

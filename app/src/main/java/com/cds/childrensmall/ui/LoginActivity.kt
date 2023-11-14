@@ -12,6 +12,7 @@ import com.cds.childrensmall.R
 import com.cds.childrensmall.base.BaseActivity
 import com.cds.childrensmall.databinding.ActivityLoginBinding
 import com.cds.childrensmall.util.SharedPreferencesUtils
+import com.cds.childrensmall.util.SoftKeyboardUtils
 import com.cds.childrensmall.util.net.DataHandler
 import com.cds.childrensmall.viewmodel.LoginViewModel
 import kotlinx.coroutines.launch
@@ -39,6 +40,54 @@ class LoginActivity : BaseActivity(), View.OnClickListener {
         mBinding.codeBtn.setOnClickListener(this)
         mBinding.cancelBtn.setOnClickListener(this)
         mBinding.confirmBtn.setOnClickListener(this)
+        mBinding.nextBtn.setOnClickListener(this)
+
+        mBinding.nickName.setOnFocusChangeListener { v, hasFocus ->
+            if (hasFocus){
+                mBinding.nickLayout.visibility = View.VISIBLE
+                mBinding.codeLayout.visibility = View.GONE
+                mBinding.phoneLayout.visibility = View.GONE
+                mBinding.title.visibility = View.GONE
+            }
+        }
+
+        mBinding.code.setOnFocusChangeListener { v, hasFocus ->
+            if (hasFocus){
+                mBinding.nickLayout.visibility = View.GONE
+                mBinding.codeLayout.visibility = View.VISIBLE
+                mBinding.phoneLayout.visibility = View.GONE
+                mBinding.title.visibility = View.GONE
+            }
+        }
+
+        mBinding.phoneNum.setOnFocusChangeListener { v, hasFocus ->
+            if (hasFocus){
+                mBinding.nickLayout.visibility = View.GONE
+                mBinding.codeLayout.visibility = View.GONE
+                mBinding.phoneLayout.visibility = View.VISIBLE
+                mBinding.title.visibility = View.GONE
+            }
+        }
+
+        //监听键盘搜索
+        SoftKeyboardUtils.setOnStatusChangedListener(
+            this@LoginActivity,
+            onStatusChangedListener = {
+                if (!it) {//隐藏键盘
+                    showAllView()
+                    mBinding.phoneNum.clearFocus()
+                    mBinding.nickName.clearFocus()
+                    mBinding.code.clearFocus()
+                }
+            })
+
+    }
+
+    private fun showAllView(){
+        mBinding.nickLayout.visibility = View.VISIBLE
+        mBinding.codeLayout.visibility = View.VISIBLE
+        mBinding.phoneLayout.visibility = View.VISIBLE
+        mBinding.title.visibility = View.VISIBLE
     }
 
     private fun initView() {
@@ -67,10 +116,23 @@ class LoginActivity : BaseActivity(), View.OnClickListener {
                    isCan =false
                    mBinding.codeBtn.text = countTime.toString()
                }
+               mBinding.phoneLayout.visibility = View.GONE
+               mBinding.codeLayout.visibility = View.VISIBLE
+               mBinding.code.isFocusable = true
+               mBinding.code.requestFocus()
+               mBinding.code.findFocus()
            }
 
            mBinding.cancelBtn->{
 
+           }
+
+           mBinding.nextBtn->{
+                 mBinding.phoneLayout.visibility = View.VISIBLE
+                 mBinding.nickLayout.visibility = View.GONE
+                 mBinding.phoneNum.isFocusable = true
+                 mBinding.phoneNum.requestFocus()
+                 mBinding.phoneNum.findFocus()
            }
 
            mBinding.confirmBtn->{

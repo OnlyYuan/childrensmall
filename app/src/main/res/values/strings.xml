@@ -2,4 +2,5 @@
     <string name="app_name">小屏</string>
     <string name="star_num_string">x %1$s </string>
     <string name="connect_tips">【请点击右上角二维码扫描按钮进行连接】 </string>
+    <string name="next_step_string">下一步</string>
 </resources>
