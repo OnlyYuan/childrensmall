@@ -300,7 +300,7 @@ class ReadActivity : BaseActivity(), View.OnClickListener {
        val  mPath = if (Build.VERSION.SDK_INT>=29){
             getExternalFilesDir(null)?.absolutePath
         } else{
-            Environment.getExternalStorageDirectory().absolutePath + "/recording.pcm"
+            Environment.getExternalStorageDirectory().absolutePath
         }
        val pcmToWavUtil =  PcmToWavUtil.getInstance()
         pcmToWavUtil.pcmToWav("$mPath/recording.pcm", "$mPath/recording.wav",
