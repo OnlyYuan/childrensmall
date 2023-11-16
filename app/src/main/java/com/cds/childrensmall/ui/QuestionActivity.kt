@@ -11,6 +11,7 @@ import android.widget.Toast
 import androidx.databinding.DataBindingUtil
 import androidx.lifecycle.lifecycleScope
 import androidx.recyclerview.widget.GridLayoutManager
+import com.bumptech.glide.Glide
 import com.cds.childrensmall.R
 import com.cds.childrensmall.adapter.AnswerAdapter
 import com.cds.childrensmall.base.BaseActivity
@@ -35,6 +36,9 @@ class QuestionActivity : BaseActivity(), View.OnClickListener {
     private lateinit var answerAdapter: AnswerAdapter
     private val questionNodeList = ArrayList<StartAnswerBean.NodeBean>() //答案list
     private lateinit var currentNode: StartAnswerBean.NodeBean //当前节点
+    private var myCountIme:WaitCounterTime?=null  //完成后定时跳转
+    private var myCountIme1:WaitCounterTime?=null  //答对后的等待
+    private var isCanTouch = true //是否可以點擊 防止多次點擊答案
 
     val mViewModel :QuestionViewModel by viewModel()
 
@@ -44,7 +48,14 @@ class QuestionActivity : BaseActivity(), View.OnClickListener {
         totalAnswerScore = 0
         initListener()
         initRecycler()
+        initView()
         startQuestionFun("Q&A")
+    }
+
+    private fun initView() {
+        Glide.with(this@QuestionActivity)
+            .load(R.mipmap.bear_jump)
+            .into(mBinding.bear)
     }
 
 
@@ -61,8 +72,11 @@ class QuestionActivity : BaseActivity(), View.OnClickListener {
 
         answerAdapter.setOnItemClickListener { adapter, view, position ->
             //点击选项后发到大屏幕
-            EventBus.getDefault().post("${questionSelectAnswer}?$position")
-            startNextQuestion(currentNode.nodeId?:"",questionNodeList[position].nodeId)
+            if (isCanTouch){
+                isCanTouch = false
+                EventBus.getDefault().post("${questionSelectAnswer}?$position")
+                startNextQuestion(currentNode.nodeId?:"",questionNodeList[position].nodeId)
+            }
         }
 
     }
@@ -134,12 +148,13 @@ class QuestionActivity : BaseActivity(), View.OnClickListener {
                         }
                         answerAdapter.setList(questionNodeList)
                     }
+                    isCanTouch = true
                     if (it != null) {
                         when(it.current?.userRespWay){
                             "none"->{ //回答正确的时候
                                 isSuccess = true
-                                val myCountIme1 = WaitCounterTime(it.current?.nodeId?:"",2000L,1000L)
-                                myCountIme1.start()
+                                myCountIme1 = WaitCounterTime(it.current?.nodeId?:"",5000L,1000L)
+                                myCountIme1?.start()
                                 mBinding.showStarView.visibility = View.VISIBLE
 
                                 if(it.current!!.content == "Well done!"){
@@ -154,8 +169,8 @@ class QuestionActivity : BaseActivity(), View.OnClickListener {
                                 answerAdapter.setList(questionNodeList)
                                 mBinding.tip.visibility = View.VISIBLE
                                 totalAnswerScore+=3
-                                val myCountIme = WaitCounterTime("",5000L,1000L)
-                                myCountIme.start()
+                                myCountIme = WaitCounterTime("",7000L,1000L)
+                                myCountIme?.start()
                                // Toast.makeText(this@QuestionActivity,"答题结束",Toast.LENGTH_SHORT).show()
                             }
                         }
@@ -185,4 +200,12 @@ class QuestionActivity : BaseActivity(), View.OnClickListener {
 
     }
 
+
+    override fun onDestroy() {
+        super.onDestroy()
+        myCountIme?.cancel()
+        myCountIme = null
+        myCountIme1?.cancel()
+        myCountIme1 = null
+    }
 }

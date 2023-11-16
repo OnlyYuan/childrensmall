@@ -5,6 +5,7 @@ import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import android.view.View
 import androidx.databinding.DataBindingUtil
+import com.bumptech.glide.Glide
 import com.cds.childrensmall.R
 import com.cds.childrensmall.base.BaseActivity
 import com.cds.childrensmall.common.mainTouchAnswerBtn
@@ -33,6 +34,10 @@ class StoryActivity : BaseActivity(), View.OnClickListener {
 
     private fun initData() {
         curContent = intent.getParcelableExtra("curContent") as ConfigDataBean.ContentData?
+        Glide.with(this@StoryActivity)
+            .load(R.mipmap.bear_belly)
+            .into(mBinding.bearGif)
+
     }
 
     private fun initListener() {
