@@ -4,7 +4,6 @@ import android.app.Service
 import android.content.Intent
 import android.os.IBinder
 import android.util.Log
-import com.cds.childrensmall.common.mainTouchStoryBtn
 import com.cds.childrensmall.common.readNextVoiceBtn
 import com.cds.childrensmall.common.readStartReadBtn
 import com.cds.childrensmall.common.unitySmallToBigString
@@ -76,7 +75,7 @@ class ClientSocketService : Service() {
      */
     @Subscribe(threadMode = ThreadMode.MAIN)
     fun onReceiveMsg(msg: String){
-        //Log.i("11","--->service ${msg}")
+        Log.i("11","--->service ${msg}")
         when(msg){
             readStartReadBtn, readNextVoiceBtn ->{//服务器返回的跟读
 

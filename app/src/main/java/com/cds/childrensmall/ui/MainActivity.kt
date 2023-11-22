@@ -5,7 +5,6 @@ import android.animation.ObjectAnimator
 import android.animation.ValueAnimator
 import android.content.Intent
 import android.content.pm.PackageManager
-import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import android.util.Log
 import android.view.View
@@ -37,6 +36,7 @@ import com.cds.childrensmall.util.totalSessionId
 import com.cds.childrensmall.viewmodel.MainViewModel
 import com.google.zxing.client.android.Intents
 import com.journeyapps.barcodescanner.CaptureActivity
+import com.unity3d.player.UnityPlayerActivity
 import kotlinx.coroutines.launch
 import org.greenrobot.eventbus.EventBus
 import org.greenrobot.eventbus.Subscribe
@@ -109,6 +109,7 @@ class MainActivity : BaseActivity(), View.OnClickListener {
        mBinding.connect.setOnClickListener(this)
        mBinding.backBtn.setOnClickListener(this)
        mBinding.next.setOnClickListener(this)
+       mBinding.gameBtn.setOnClickListener(this)
     }
 
     private fun initView() {
@@ -221,8 +222,10 @@ class MainActivity : BaseActivity(), View.OnClickListener {
 
                if (curPosition!=-1) {
                     totalCurrentLevel =3
-                   EventBus.getDefault().post(mainTouchGameBtn)
+                    startActivity(Intent(this@MainActivity,UnityPlayerActivity::class.java))
+                    EventBus.getDefault().post(mainTouchGameBtn)
                }
+
            }
 
 
