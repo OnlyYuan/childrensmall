@@ -38,6 +38,10 @@
         android:theme="@style/Theme.Childrensmall"
         android:usesCleartextTraffic="true"
         tools:targetApi="31">
+        <activity
+            android:name=".ui.MyUnityMainActivity"
+            android:exported="true"
+           />
 
         <activity
             android:name=".ui.MySplashActivity"
